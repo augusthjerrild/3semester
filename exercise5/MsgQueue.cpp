@@ -49,7 +49,6 @@ Message* MsgQueue::receive(unsigned long &id)
 
 MsgQueue::~MsgQueue()
 {
-    delete &container_;
     pthread_cond_destroy(&cond);
     pthread_mutex_destroy(&mtx);
 }

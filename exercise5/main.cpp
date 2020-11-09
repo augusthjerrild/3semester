@@ -3,9 +3,8 @@
 int main()
 {
 
-
     startCarThread();
-    
+   
 
 
     return 0;

@@ -2,13 +2,13 @@
 #include "Message.h"
 #include <pthread.h>
 #include <iostream>
-#include "MsgQueue.cpp"
+#include "MsgQueue.h"
 #include "unistd.h"
 
 using namespace std;
 
 //Car 
-MsgQueue carMq(10);
+MsgQueue carMq(1);
 pthread_t car;
 
 //Entry
@@ -156,7 +156,9 @@ bool openEntryDoor()
 
 void entryDoorHandleIdEntryDoorReq(entryDoorOpenReq* req)
 {
+
     entryDoorOpenCfm* cfm = new entryDoorOpenCfm;
+    openEntryDoor();
     cfm->result_ = openEntryDoor();
  
     cout << "Car drives in" << endl;
@@ -270,15 +272,46 @@ void startCarThread()
     // {
     //     Car* carPtr = &info[i];
     //     carPtr->carID = i+1;
-        pthread_create(&car, NULL, carFunction, NULL);
-        pthread_join(car, NULL);
+    int err;
 
-        pthread_create(&entryDoor, NULL, entryDoorFunction, NULL);
-        pthread_join(entryDoor, NULL);
+        err = pthread_create(&car, NULL, carFunction, NULL);
+        if(err < 0)
+        {
+            cout << "Fejl i create car" << endl;
+        }
+        
+        err = pthread_join(car, NULL);
+        if(err < 0)
+        {
+            cout << "Fejl i join car" << endl;
+        }
+        
+        err = pthread_create(&entryDoor, NULL, entryDoorFunction, NULL);
+        if(err < 0)
+        {
+            cout << "Fejl i create entry" << endl;
+        }
+        
+        err = pthread_join(entryDoor, NULL);
+        if(err < 0)
+        {
+            cout << "Fejl i join entry" << endl;
+        }
+        
 
-        pthread_create(&exitDoor, NULL, exitDoorFunction, NULL);
-        pthread_join(exitDoor, NULL);
-    
+        err = pthread_create(&exitDoor, NULL, exitDoorFunction, NULL);
+        if(err < 0)
+        {
+            cout << "Fejl i create exit" << endl;
+        }
+        
+        err = pthread_join(exitDoor, NULL);
+        if(err < 0)
+        {
+            cout << "Fejl i join exit" << endl;
+        }
+        
+
         carMq.send(ID_START_IND);
     //}
     

@@ -1,4 +1,4 @@
-SOURCES=main.cpp MsgQueue.cpp
+SOURCES=MsgQueue.cpp main.cpp
 OBJECTS=$(addprefix $(BUILD_DIR)/,$(SOURCES:.cpp=.o))
 DEPS=$(SOURCES:.cpp=.d)
 EXE=$(addprefix $(BIN_DIR)/,prog)
